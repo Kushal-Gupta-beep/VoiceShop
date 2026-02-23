@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>🛒 Voice Shopping Assistant</title>
+    <meta name="description" content="A voice-controlled multilingual smart shopping list powered by AI." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+
+    <!-- ===================== HEADER ===================== -->
+    <header class="header">
+        <div class="header-inner">
+            <div class="logo">
+                <span class="logo-icon">🛒</span>
+                <span class="logo-text">VoiceShop</span>
+            </div>
+            <p class="header-tagline">AI-powered multilingual voice shopping assistant</p>
+        </div>
+    </header>
+
+    <!-- ===================== MAIN CONTENT WRAPPER ===================== -->
+    <main class="main-content-wrapper">
+
+        <!-- ===================== MAIN LAYOUT ===================== -->
+        <div class="layout">
+
+            <!-- ---- LEFT PANEL: Voice Input ---- -->
+            <section class="panel panel-voice">
+                <h2 class="panel-title">Voice Command</h2>
+
+                <!-- Language Selector -->
+                <div class="lang-selector-section">
+                    <label class="manual-label" for="langSelect">🌍 Language</label>
+                    <div class="lang-select-row">
+                        <select id="langSelect" class="lang-select" aria-label="Select voice language">
+                            <!-- Populated dynamically from /api/languages -->
+                        </select>
+                        <span id="langStatus" class="lang-status"></span>
+                    </div>
+                </div>
+
+                <!-- Phrase Examples hint — updates with selected language -->
+                <div id="phraseHints" class="phrase-hints" aria-live="polite"></div>
+
+                <!-- Mic Button -->
+                <div class="mic-section">
+                    <button id="micBtn" class="mic-btn" aria-label="Start voice recognition" title="Click to speak">
+                        <span class="mic-icon">🎙️</span>
+                    </button>
+                    <p id="micStatus" class="mic-status">Click the mic to speak</p>
+                </div>
+
+                <!-- Transcript -->
+                <div class="transcript-box" id="transcriptBox" aria-live="polite">
+                    <p class="transcript-placeholder" id="transcriptPlaceholder">Your voice input will appear here...
+                    </p>
+                    <p id="transcriptText" class="transcript-text" hidden></p>
+                </div>
+
+                <!-- Translation note (shown when input was translated) -->
+                <div id="translationNote" class="translation-note" hidden aria-live="polite"></div>
+
+                <!-- Parsed Intent -->
+                <div class="intent-box" id="intentBox" hidden>
+                    <h3 class="intent-title">Detected Intent</h3>
+                    <div id="intentContent" class="intent-content"></div>
+                </div>
+
+                <!-- Status message -->
+                <div id="statusMsg" class="status-msg" aria-live="assertive" hidden></div>
+
+                <!-- Manual text input fallback -->
+                <div class="manual-input-section">
+                    <label for="manualInput" class="manual-label">Or type a command:</label>
+                    <div class="manual-row">
+                        <input id="manualInput" class="manual-input" type="text"
+                            placeholder='"Add 2 apples", "I need milk", "Find toothpaste under $5"'
+                            aria-label="Manual text command" />
+                        <button id="manualSubmitBtn" class="btn btn-primary">Send</button>
+                    </div>
+                </div>
+
+                <!-- Quick Search bar -->
+                <div class="search-shortcut-section">
+                    <label class="manual-label">🔍 Quick Search:</label>
+                    <div class="manual-row">
+                        <input id="searchInput" class="manual-input" type="text"
+                            placeholder='"organic apples", "milk under $2"' aria-label="Search products" />
+                        <button id="searchBtn" class="btn btn-search">Search</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ---- MIDDLE PANEL: Shopping List ---- -->
+            <section class="panel panel-list">
+                <div class="panel-header">
+                    <h2 class="panel-title">Shopping List</h2>
+                    <button id="clearListBtn" class="btn btn-danger-outline" title="Clear all items">Clear All</button>
+                </div>
+                <div id="listContainer" class="list-container">
+                    <p class="empty-state" id="emptyState">Your list is empty. Start talking! 🛍️</p>
+                </div>
+                <p class="item-count" id="itemCount"></p>
+            </section>
+
+            <!-- ---- RIGHT PANEL: Suggestions ---- -->
+            <section class="panel panel-suggestions">
+                <h2 class="panel-title">Suggestions</h2>
+                <div class="suggestion-group">
+                    <h3 class="suggestion-group-title">🌿 Seasonal Picks</h3>
+                    <div id="seasonalSuggestions" class="suggestion-chips"></div>
+                </div>
+                <div class="suggestion-group" id="substituteGroup" hidden>
+                    <h3 class="suggestion-group-title">🔄 Substitutes</h3>
+                    <div id="substituteSuggestions" class="suggestion-chips"></div>
+                </div>
+                <div class="suggestion-group">
+                    <h3 class="suggestion-group-title">⭐ Frequently Used</h3>
+                    <div id="frequentSuggestions" class="suggestion-chips"></div>
+                </div>
+                <p class="suggestion-hint">Tap any suggestion to add it to your list.</p>
+            </section>
+
+        </div>
+
+        <!-- ===================== SEARCH RESULTS ===================== -->
+        <section id="searchResultsSection" class="search-results-section" hidden>
+            <div class="search-results-inner">
+                <div class="search-results-header">
+                    <div>
+                        <h2 class="search-results-title">🔍 Search Results</h2>
+                        <p id="searchResultsMeta" class="search-results-meta"></p>
+                    </div>
+                    <button id="closeSearchBtn" class="btn btn-close-search">✕ Close</button>
+                </div>
+                <div id="activeFilters" class="active-filters" hidden></div>
+                <div id="catalogResultsGrid" class="catalog-grid"></div>
+                <div id="listMatchSection" class="list-match-section" hidden>
+                    <h3 class="list-match-title">📋 In Your List</h3>
+                    <div id="listMatchItems" class="list-match-items"></div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ===================== FOOTER ===================== -->
+    <footer class="footer">
+        <p>Built with ❤️ using Web Speech API · Hugging Face flan-t5-base · Helsinki-NLP translation (all free)</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

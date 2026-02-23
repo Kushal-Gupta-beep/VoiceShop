@@ -1,0 +1,9 @@
+# Environment variables — never commit these
+.env
+
+# Node modules
+node_modules/
+
+# Logs
+*.log
+npm-debug.log*
