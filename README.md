@@ -121,13 +121,13 @@ parsing automatically when `HF_API_KEY` is not set.
 
 ## Features
 
-- 🎙️ **Voice Input** — Uses browser's `SpeechRecognition` API with interim results
-- 🧠 **NLP Intent Extraction** — `google/flan-t5-base` extracts intent, item, quantity, category
-- 🔄 **Smart Fallback** — Regex + keyword rules take over if LLM fails or is unavailable
-- 🗂️ **Auto-categorization** — Items automatically sorted into Fruits, Dairy, Bakery, etc.
-- ✨ **Smart Suggestions** — Seasonal picks, substitutes, frequently used items
-- ⌨️ **Manual Input** — Type commands if voice is unavailable
-- 💾 **In-memory Storage** — No database required
+- **Voice Input** — Uses browser's `SpeechRecognition` API with interim results
+- **NLP Intent Extraction** — `google/flan-t5-base` extracts intent, item, quantity, category
+- **Smart Fallback** — Regex + keyword rules take over if LLM fails or is unavailable
+- **Auto-categorization** — Items automatically sorted into Fruits, Dairy, Bakery, etc.
+- **Smart Suggestions** — Seasonal picks, substitutes, frequently used items
+- **Manual Input** — Type commands if voice is unavailable
+- **In-memory Storage** — No database required
 
 ---
 
