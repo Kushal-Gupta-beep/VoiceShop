@@ -1,5 +1,7 @@
 # 🛒 Voice Command Shopping Assistant
 
+🌍 **Live Demo:** [https://voiceshop.onrender.com/](https://voiceshop.onrender.com/)
+
 A fully voice-controlled shopping list application built with vanilla HTML/JS and a
 Node.js backend. Speak your grocery commands — the app understands you.
 
